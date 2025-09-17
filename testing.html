@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>蘭花小舖 — 精選蘭花販售</title>
+  <style>
+    :root{--accent:#5b8c5a;--muted:#666}
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","Microsoft JhengHei",sans-serif;margin:0;color:#222;background:#f7f7f7}
+    header{background:linear-gradient(90deg,#ffffff, #f0fff0);border-bottom:1px solid #e6e6e6}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;background:var(--accent);color:#fff;border-radius:8px;display:grid;place-items:center;font-weight:700}
+    nav a{margin-left:12px;text-decoration:none;color:var(--muted)}
+    .hero{display:flex;flex-wrap:wrap;align-items:center;gap:20px;padding:36px 0}
+    .hero-text{flex:1;min-width:260px}
+    .hero h1{font-size:2rem;margin:0 0 8px}
+    .hero p{margin:0 0 16px;color:var(--muted)}
+    .hero img{width:320px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
+    .card{background:#fff;border-radius:12px;padding:14px;border:1px solid #eee;display:flex;flex-direction:column}
+    .thumb{height:160px;border-radius:8px;background:linear-gradient(180deg,#eaf7ee,#f9fdf9);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);margin-bottom:10px}
+    .title{font-weight:700;margin-bottom:6px}
+    .price{color:var(--accent);font-weight:700}
+    .meta{color:var(--muted);font-size:0.9rem;margin-bottom:10px}
+    .btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .btn.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+    footer{padding:30px 0;margin-top:30px;color:var(--muted)}
+
+    /* cart drawer */
+    .cart-btn{position:relative}
+    .cart-count{position:absolute;top:-8px;right:-8px;background:#ff4d4f;color:#fff;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;font-size:0.75rem}
+    .drawer{position:fixed;right:18px;bottom:18px;width:360px;max-width:95%;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);overflow:hidden;transform:translateY(0);}
+    .drawer.hidden{display:none}
+    .drawer header{padding:12px 16px;border-bottom:1px solid #eee;font-weight:700}
+    .drawer .items{max-height:320px;overflow:auto;padding:12px}
+    .drawer .item{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px dashed #f0f0f0}
+    .drawer .subtotal{padding:12px 16px;border-top:1px solid #eee;font-weight:700}
+
+    /* responsive */
+    @media (max-width:640px){.hero img{width:100%;max-width:420px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">蘭</div>
+        <div>
+          <div style="font-weight:700">蘭花小舖</div>
+          <div style="font-size:0.85rem;color:var(--muted)">精選台灣在地蘭花 · 新鮮直送</div>
+        </div>
+      </div>
+      <div>
+        <a href="#products">商品列表</a>
+        <a href="#about">關於我們</a>
+        <a href="#contact">聯絡我們</a>
+        <button class="btn cart-btn" id="open-cart">購物車 <span class="cart-count" id="cart-count">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>歡迎來到 蘭花小舖</h1>
+        <p>我們提供多種品質優良的蘭花，適合居家擺設、送禮與辦公室美化。每株皆由專業栽培者細心養護。</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a href="#products" class="btn">開始選購</a>
+          <a href="#about" class="btn secondary">了解我們</a>
+        </div>
+      </div>
+      <img alt="蘭花" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='%23f6fff6'/><text x='50%' y='50%' font-family='Noto Sans TC' font-size='28' fill='%235b8c5a' text-anchor='middle' alignment-baseline='middle'>漂亮的蘭花示意圖</text></svg>" />
+    </section>
+
+    <section id="products">
+      <h2 style="margin-top:8px">熱賣品</h2>
+      <div class="grid" id="product-grid"></div>
+    </section>
+
+    <section id="about" style="margin-top:28px;background:#fff;padding:18px;border-radius:12px">
+      <h3>關於我們</h3>
+      <p style="color:var(--muted)">蘭花小舖結合在地花農與專業運送，堅持品質與服務。網站以簡潔易用為主，歡迎任何訂購或大量採購需求，請透過下方聯絡方式與我們聯繫。</p>
+    </section>
+
+    <section id="contact" style="margin-top:18px;padding:18px;border-radius:12px">
+      <h3>聯絡我們</h3>
+      <p style="color:var(--muted)">電話：+886-2-1234-5678 • 電子信箱：service@example.com</p>
+      <p>若您想下訂或詢問，請填寫下方簡短表單（範例會以 mailto 發送）</p>
+      <form id="contact-form" onsubmit="contactForm(event)" style="display:grid;gap:8px;max-width:560px">
+        <input required placeholder="姓名" id="c-name" />
+        <input required placeholder="電子郵件" id="c-email" />
+        <textarea required placeholder="內容 / 訂購內容" id="c-message" rows="4"></textarea>
+        <button class="btn">送出</button>
+      </form>
+    </section>
+
+    <footer>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
+        <div>© <span id="year"></span> 蘭花小舖 · All rights reserved.</div>
+        <div style="color:var(--muted);font-size:0.9rem">免責聲明：本站範例為教學用途，實際販售請依當地法規與消費者保護規定辦理。</div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- cart drawer -->
+  <div class="drawer hidden" id="cart-drawer">
+    <header>購物車</header>
+    <div class="items" id="cart-items"></div>
+    <div class="subtotal" id="cart-subtotal"></div>
+    <div style="display:flex;gap:8px;padding:12px;justify-content:space-between;background:#fafafa">
+      <button class="btn" id="checkout">結帳</button>
+      <button class="btn secondary" id="close-cart">繼續購物</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 範例商品資料（您可以直接修改或延伸）
+    const products = [
+      {id:1,name:'蝴蝶蘭（粉色）',price:880,short:'適合送禮與擺放客廳',stock:12,desc:'花色粉嫩，花量豐富，易於栽培。'},
+      {id:2,name:'文心蘭（白色）',price:650,short:'香氣淡雅的文心蘭',stock:8,desc:'枝葉挺拔，耐陰性佳，適合室內環境。'},
+      {id:3,name:'蝴蝶蘭（紫色）',price:980,short:'稀有花色，色澤飽和',stock:4,desc:'賞相佳，送禮或收藏皆宜。'}
+    ];
+
+    // 簡單的本地購物車，儲存在 localStorage
+    let cart = JSON.parse(localStorage.getItem('orchid_cart')||'[]');
+
+    function saveCart(){ localStorage.setItem('orchid_cart', JSON.stringify(cart)); updateCartUI(); }
+
+    function addToCart(id, qty=1){
+      const p = products.find(x=>x.id===id);
+      if(!p) return alert('商品不存在');
+      const inCart = cart.find(i=>i.id===id);
+      if(inCart){ if(inCart.qty + qty > p.stock) return alert('庫存不足'); inCart.qty += qty; }
+      else{ if(qty>p.stock) return alert('庫存不足'); cart.push({id:id,qty:qty}); }
+      saveCart();
+    }
+
+    function removeFromCart(id){ cart = cart.filter(i=>i.id!==id); saveCart(); }
+    function changeQty(id, qty){ const p = products.find(x=>x.id===id); if(qty<1) return; if(qty>p.stock) return alert('庫存不足'); const it = cart.find(i=>i.id===id); if(it){ it.qty = qty; saveCart(); } }
+
+    function updateCartUI(){
+      const count = cart.reduce((s,i)=>s+i.qty,0);
+      document.getElementById('cart-count').textContent = count;
+      const itemsEl = document.getElementById('cart-items'); itemsEl.innerHTML='';
+      if(cart.length===0){ itemsEl.innerHTML = '<div style="padding:16px;color:var(--muted)">購物車目前為空</div>'; document.getElementById('cart-subtotal').textContent='小計：NT$0'; return; }
+      let subtotal=0;
+      cart.forEach(ci=>{
+        const p = products.find(x=>x.id===ci.id);
+        const row = document.createElement('div'); row.className='item';
+        row.innerHTML = `
+          <div style="flex:1">
+            <div style="font-weight:700">${p.name}</div>
+            <div class="meta">NT$${p.price} • ${p.short}</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+              <button class="btn secondary" onclick="changeQty(${p.id},${ci.qty-1})">-</button>
+              <div style="min-width:28px;text-align:center">${ci.qty}</div>
+              <button class="btn secondary" onclick="changeQty(${p.id},${ci.qty+1})">+</button>
+              <button class="btn" style="margin-left:auto" onclick="removeFromCart(${p.id})">移除</button>
+            </div>
+          </div>
+        `;
+        itemsEl.appendChild(row);
+        subtotal += p.price * ci.qty;
+      });
+      document.getElementById('cart-subtotal').textContent = '小計：NT$' + subtotal;
+    }
+
+    // render products
+    function renderProducts(){
+      const grid = document.getElementById('product-grid');
+      products.forEach(p=>{
+        const card = document.createElement('div'); card.className='card';
+        card.innerHTML = `
+          <div class="thumb">${p.name}</div>
+          <div class="title">${p.name}</div>
+          <div class="meta">${p.short}</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:auto">
+            <div class="price">NT$${p.price}</div>
+            <button class="btn" onclick="addToCart(${p.id},1)">加入購物車</button>
+            <button class="btn secondary" onclick="showDetail(${p.id})">查看</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function showDetail(id){
+      const p = products.find(x=>x.id===id);
+      if(!p) return;
+      // 簡易的 detail modal（使用 window.confirm 作為範例）
+      const buy = confirm(`${p.name}\n\n${p.desc}\n\n價格：NT$${p.price}\n\n要加入購物車嗎？`);
+      if(buy) addToCart(id,1);
+    }
+
+    // contact form
+    function contactForm(e){ e.preventDefault(); const name = document.getElementById('c-name').value; const email = document.getElementById('c-email').value; const msg = document.getElementById('c-message').value; const subject = encodeURIComponent('來自網站的詢問 — ' + name); const body = encodeURIComponent('姓名：'+name+'\n電子郵件：'+email+'\n\n內容：\n'+msg); window.location.href = `mailto:service@example.com?subject=${subject}&body=${body}`; }
+
+    // cart drawer controls
+    document.getElementById('open-cart').addEventListener('click',()=>{
+      const d = document.getElementById('cart-drawer'); d.classList.remove('hidden'); updateCartUI();
+    });
+    document.getElementById('close-cart').addEventListener('click',()=>{
+      document.getElementById('cart-drawer').classList.add('hidden');
+    });
+
+    document.getElementById('checkout').addEventListener('click',()=>{
+      if(cart.length===0) return alert('購物車為空');
+      // 簡單示意：匯出訂單摘要並以 mailto 開啟
+      let body = '訂單內容%0A%0A'; let total=0;
+      cart.forEach(ci=>{ const p = products.find(x=>x.id===ci.id); body += `${p.name} x ${ci.qty} — NT$${p.price*ci.qty}%0A`; total += p.price*ci.qty; });
+      body += `%0A小計 NT$${total}%0A%0A請填寫收件資訊：\n姓名：\n電話：\n地址：`; const subject = encodeURIComponent('新訂單'); window.location.href = `mailto:service@example.com?subject=${subject}&body=${body}`;
+    });
+
+    // 公開函式給按鈕使用
+    window.addToCart = addToCart; window.removeFromCart = removeFromCart; window.changeQty = changeQty; window.showDetail = showDetail; window.contactForm = contactForm;
+
+    // 初始化
+    renderProducts(); updateCartUI();
+  </script>
+</body>
+</html>
